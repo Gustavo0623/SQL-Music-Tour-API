@@ -18,7 +18,16 @@ events.get('/', async (req, res) => {
 
 // Find Specific Event
 
-
+events.get('/:id', async (req, res) => {
+    try{
+        const foundEvent = await Event.findOne({
+            where: { event_id: req.params.id }
+        })
+        res.status(200).json(foundEvent)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
 
 // Create Event
 
