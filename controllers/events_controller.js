@@ -1,7 +1,7 @@
 // Dependencies
 const events = require('express').Router()
 const db = require('../models')
-const { Event, Band, Stage } = db
+const { Event, Meet_Greet, Set_Time, Band, Stage } = db
 
 // Find All Events
 
@@ -18,31 +18,28 @@ events.get('/', async (req, res) => {
 
 // Find Specific Event
 
-events.get('/:id', async (req, res) => {
+events.get('/:name', async (req, res) => {
+    console.log('test')
     try{
         const foundEvent = await Event.findOne({
-            where: { event_id: req.params.id },
+            where: { name: req.params.name },
             include: [
                 {
-                    model: MeetGreet, 
+                    model: Meet_Greet, 
                     as: "meet_greets",
+                    attributes: { exclude: [ "event_id", "band_id" ] },
                     include: {
-                        model: Band,
-                        as: "band",
+                         model: Band, 
+                         as: "band", 
                     }
                 },
                 {
-                    model: SetTime,
+                    model: Set_Time,
                     as: "set_time",
+                    attributes: { exclude: [ "event_id", "stage_id", "band_id" ] },
                     include: [
-                        {
-                            model: Stage,
-                            as: 'stage'
-                        }, 
-                        {
-                            model: Band,
-                            as: "band"
-                        }
+                        { model: Band, as: "band" },
+                        { model: Stage, as: "stage" }
                     ]
                 },
                 { 
