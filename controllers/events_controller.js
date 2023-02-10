@@ -8,7 +8,7 @@ const { Event, Band, Stage } = db
 events.get('/', async (req, res) => {
     try{
         console.log('test')
-        const foundEvents = await Event.findAll()
+        const foundEvents = await Event.findAll({ order: [['date', 'ASC']] })
         res.status(200).json(foundEvents)
         console.log('all good')
     } catch (error) {
